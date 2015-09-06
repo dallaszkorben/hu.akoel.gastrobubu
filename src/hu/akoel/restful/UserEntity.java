@@ -6,19 +6,21 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @Entity
+@Table(name="users")
 @XmlRootElement
-public class UserModel {
+public class UserEntity{
 	private Integer id;
 	private String name;
 	private String password;
 
-	public UserModel() {
+	public UserEntity() {
 	}
 
-	public UserModel(String name) {
+	public UserEntity(String name) {
 		this.name = name;
 	}
 

@@ -1,9 +1,11 @@
 package hu.akoel.restful;
 
 import javax.ejb.*;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -43,12 +45,13 @@ public class UsersResource {
 	 * 
      * @return
 	 */
+	@SuppressWarnings("unchecked")
 	@GET
 	@Produces({ MediaType.TEXT_PLAIN, MediaType.TEXT_XML, MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public List<UserModel> getUsers() {				
-		List<UserModel> users = new ArrayList<UserModel>();
+	public List<UserEntity> getUsers() {				
+		List<UserEntity> users = new ArrayList<UserEntity>();
 
-		Query q = em.createQuery("SELECT u FROM UserModel u ORDER BY u.id"); 
+		Query q = em.createQuery("SELECT u FROM UserEntity u ORDER BY u.id"); 
 		users = q.getResultList();
 
 		return users;
@@ -61,7 +64,7 @@ public class UsersResource {
 			@FormParam("name") String name,
 			@FormParam("password") String password,
 			@Context HttpServletResponse servletResponse) throws IOException {
-		UserModel user = new UserModel(name);
+		UserEntity user = new UserEntity(name);
 		if (password != null) {
 			user.setPassword(password);	
 		}		
@@ -84,7 +87,7 @@ public class UsersResource {
 	public Response deleteUser(@PathParam("userId") Integer userId) {
 
 		try{
-			UserModel user = em.find( UserModel.class, userId );
+			UserEntity user = em.find( UserEntity.class, userId );
 			em.persist(user);
 			em.remove(user);
 		}catch(Exception e ){
@@ -98,9 +101,9 @@ public class UsersResource {
 	@Path("{userId}")
 	@GET
 	@Produces({ MediaType.TEXT_PLAIN, MediaType.TEXT_XML, MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public UserModel getUser( @PathParam("userId") Integer userId ) {
+	public UserEntity getUser( @PathParam("userId") Integer userId ) {
 
-		UserModel user = em.find(UserModel.class, userId);
+		UserEntity user = em.find(UserEntity.class, userId);
 
 		if (user == null)			
 			//TODO make it standarized
@@ -119,7 +122,7 @@ public class UsersResource {
 			@Context HttpServletResponse servletResponse) {
 
 		Response res;
-		UserModel user = em.find(UserModel.class, userId );
+		UserEntity user = em.find(UserEntity.class, userId );
 		if( null == user ){
 			res = Response.status(Status.NOT_FOUND).build();
 		}else{
